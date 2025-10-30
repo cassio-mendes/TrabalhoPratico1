@@ -27,21 +27,8 @@ public class Jogador {
             return false;
         }
 
-        Tesouro[][] matrizTabuleiro = this.tabuleiro.getPosicoes();
-        boolean podePosicionar = true;
-
-        for (int i = 0; i < matrizTabuleiro.length; i++) {
-            for (int j = 0; j < matrizTabuleiro[0].length; j++) {
-                if(matrizTabuleiro[i][j] != null) { //Já existe um tesouro nessa posição
-                    podePosicionar = false;
-                    break;
-                }
-            }
-
-            if(podePosicionar) {break;}
-        }
-
-        return podePosicionar;
+        //Se o tabuleiro na linha y e na coluna x tiver valor null, esse espaço está vazio e pode receber um tesouro
+        return this.tabuleiro.getPosicoes()[tesouro.getY()][tesouro.getX()] == null;
     }
 
 }

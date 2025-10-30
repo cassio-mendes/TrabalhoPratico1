@@ -2,17 +2,19 @@
 public class Tesouro {
 
     //Cada tesouro tem sua cor, que será seu identificador no mapa, e sua posição no tabuleiro
-    private char cor;
+    private String cor;
     private int x, y; //x é a coluna e y é a linha
+    private int valorPontos;
 
     //O objeto tesouro é criado recebendo cor, x e y como argumentos
-    public Tesouro(char cor, int x, int y) {
+    public Tesouro(String cor, int x, int y, int valorPontos) {
         this.cor = cor;
         this.x = x;
         this.y = y;
+        this.valorPontos = valorPontos;
     }
 
-    public char getCor() {
+    public String getCor() {
         return cor;
     }
 
@@ -22,5 +24,9 @@ public class Tesouro {
 
     public int getY() {
         return y;
+    }
+
+    public int getValorPontos() {
+        return valorPontos;
     }
 }
