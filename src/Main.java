@@ -51,8 +51,8 @@ public class Main {
                 tabuleiro 10x10. Deve-se informar a linha e a coluna do tesouro, que vão de 0 a 9. O jogo terá um total
                 de 20 rodadas, 10 para cada jogador. A cada rodada, vocês devem tentar adivinhar onde está o tesouro do
                 adversário, informando uma coordenada (linha e coluna) válida. Existem 3 tipos de tesouros:
-                Amarelos - 4 pontos; Verdes - 6 pontos; Vermelhos: 10 pontos. Cada jogador terá 3 Verdes, representados
-                pela letra 'G'; 3 Amarelos, de letra 'Y'; e 2 Vermelhos, de letra 'R'. O jogo termina quando todos os
+                Amarelos - 4 pontos; Laranjas - 6 pontos; Vermelhos: 10 pontos. Cada jogador terá 3 Laranjas, representados
+                pela letra 'L'; 3 Amarelos, de letra 'A'; e 2 Vermelhos, de letra 'V'. O jogo termina quando todos os
                 tesouros de um jogador forem encontrados, ou depois de se passarem as 20 rodadas. Neste caso, vence
                 quem acumular mais pontos.""");
     }
