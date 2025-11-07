@@ -57,6 +57,8 @@ public class Main {
                 quem acumular mais pontos.""");
     }
 
+    //pq que o parâmetro tem os dois jogadores? tô tentando fazer uma 
+    //ordenção de jogadas em jogo! dps dá uma olhada pfvr
     private static void jogar(Jogador jogador1, Jogador jogador2) {
 
     }
