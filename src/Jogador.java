@@ -31,4 +31,11 @@ public class Jogador {
         return this.tabuleiro.getPosicoes()[tesouro.getY()][tesouro.getX()] == null;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public Tabuleiro getTabuleiro() {
+        return tabuleiro;
+    }
 }

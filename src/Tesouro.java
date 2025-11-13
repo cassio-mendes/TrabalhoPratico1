@@ -13,7 +13,7 @@ public class Tesouro {
         this.x = x;
         this.y = y;
         this.valorPontos = valorPontos;
-        this.identificador = String.valueOf(this.cor.charAt(0)).toUpperCase();
+        this.identificador = String.valueOf(this.cor.charAt(0));
     }
 
     public String getCor() {
@@ -30,5 +30,9 @@ public class Tesouro {
 
     public int getValorPontos() {
         return valorPontos;
+    }
+
+    public String getIdentificador() {
+        return identificador;
     }
 }

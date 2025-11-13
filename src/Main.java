@@ -2,9 +2,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    static Scanner scanner = new Scanner(System.in);
 
+    public static void main(String[] args) {
         System.out.println("-----BEM VINDO à CAÇA AO TESOURO!!!-----");
         System.out.println("     Quais os jogadores de hoje?");
         String nome1 = scanner.next();
@@ -57,10 +57,80 @@ public class Main {
                 quem acumular mais pontos.""");
     }
 
-    //pq que o parâmetro tem os dois jogadores? tô tentando fazer uma 
-    //ordenção de jogadas em jogo! dps dá uma olhada pfvr
-    private static void jogar(Jogador jogador1, Jogador jogador2) {
+    private static void mostrarMenuJogo() {
+        System.out.println();
+    }
 
+    private static void mostrarTabuleiros(Jogador jogador1, Jogador jogador2) {
+        System.out.println("----- TABULEIROS -----\n");
+
+        System.out.println("    " + jogador1.getNome());
+        imprimirMatriz(jogador1); //Tabuleiro jogador1
+
+        System.out.println("\n    " + jogador2.getNome());
+        imprimirMatriz(jogador2); //Tabuleiro jogador2
+    }
+
+    private static void imprimirMatriz(Jogador jogador) {
+        final int TAMANHO_TABULEIRO = jogador.getTabuleiro().getPosicoes().length;
+
+        for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+            for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+                System.out.print(jogador.getTabuleiro().getPosicoes()[i][j].getIdentificador() + " ");
+            }
+
+            System.out.println();
+        }
+    }
+
+    private static void jogar(Jogador jogador1, Jogador jogador2) {
+        System.out.println("-----PREENCHENDO TABULEIROS-----");
+        preencherTabuleiro(jogador1);
+        preencherTabuleiro(jogador2);
+
+        System.out.println("-----COMEÇANDO O JOGO-----");
+        Jogo jogo = new Jogo();
+
+
+    }
+
+    private static void preencherTabuleiro(Jogador jogador) {
+        System.out.println("\nJogador " + jogador.getNome() + ", informe as coordenadas dos seus tesouros:");
+
+        System.out.print("AMARELOS (4 pontos cada):");
+        for (int i = 0; i < 3; i++) {
+            inserirTesouro(jogador, "Amarelo", 4);
+            if(i != 2) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+        }
+
+        System.out.println("\nLARANJAS (6 pontos cada):");
+        for (int i = 0; i < 3; i++) {
+            inserirTesouro(jogador, "Laranja", 6);
+            if(i != 2) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+        }
+
+        System.out.println("\nVERMELHOS (10 pontos cada):");
+        for (int i = 0; i < 2; i++) {
+            inserirTesouro(jogador, "Vermelho", 10);
+            if(i != 1) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+        }
+    }
+
+    private static void inserirTesouro(Jogador jogador, String cor, int valorPontos) {
+        boolean posicionou;
+        do {
+            System.out.print("Linha (0 a 9): ");
+            int linha = scanner.nextInt();
+
+            System.out.print("Coluna (0 a 9): ");
+            int coluna = scanner.nextInt();
+
+            posicionou = jogador.posicionarTesouro(new Tesouro(cor, coluna, linha, valorPontos));
+
+            if(!posicionou) {
+                System.out.println("\nERRO: insira coordenadas válidas! Dois tesouros não podem ocupar o mesmo espaço\n");
+            }
+        } while(!posicionou);
     }
 
 }
