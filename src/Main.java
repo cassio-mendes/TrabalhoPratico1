@@ -20,7 +20,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    jogar(jogador1, jogador2);
+                    iniciarJogo(jogador1, jogador2);
                     break;
 
                 case 2:
@@ -57,10 +57,6 @@ public class Main {
                 quem acumular mais pontos.""");
     }
 
-    private static void mostrarMenuJogo() {
-        System.out.println();
-    }
-
     private static void mostrarTabuleiros(Jogador jogador1, Jogador jogador2) {
         System.out.println("----- TABULEIROS -----\n");
 
@@ -83,14 +79,26 @@ public class Main {
         }
     }
 
-    private static void jogar(Jogador jogador1, Jogador jogador2) {
+    private static void iniciarJogo(Jogador jogador1, Jogador jogador2) {
         System.out.println("-----PREENCHENDO TABULEIROS-----");
         preencherTabuleiro(jogador1);
         preencherTabuleiro(jogador2);
 
-        System.out.println("-----COMEÇANDO O JOGO-----");
+        System.out.println("-----COMEÇANDO O JOGO-----\n");
         Jogo jogo = new Jogo();
 
+        while(jogo.getRodadas() < 21 || jogo.getTesourosPerdidos1() < 8 || jogo.getTesourosPerdidos2() < 8) {
+
+            //Se a rodada atual for par, vez do jogador2; do contrário, vez do jogador1
+            Jogador jogadorAtual = jogo.getRodadas() % 2 == 0 ? jogador2 : jogador1;
+            jogar(jogadorAtual, jogador1, jogador2);
+        }
+    }
+
+    private static void jogar(Jogador jogadorAtual, Jogador jogador1, Jogador jogador2) {
+        System.out.println("-----VEZ DE " + jogadorAtual.getNome() + "-----\n");
+
+        mostrarTabuleiros(jogador1, jogador2);
 
     }
 
