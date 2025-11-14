@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -36,6 +37,8 @@ public class Main {
                     System.out.println("Opção inválida... Tente de novo!");
             }
         } while(opcao != 1);
+
+        System.out.println("\n-----ENCERRANDO PROGRAMA-----");
     }
 
     private static void mostrarMenuInicial(String nome1, String nome2) {
@@ -74,7 +77,7 @@ public class Main {
 
         for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
             for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
-                if(tabuleiro[i][j] == null) {
+                if(tabuleiro[i][j] == null || !tabuleiro[i][j].getEncontrado()) {
                     System.out.print("# ");
                 } else {
                     System.out.print(tabuleiro[i][j].getIdentificador() + " ");
@@ -86,12 +89,13 @@ public class Main {
     }
 
     private static void iniciarJogo(Jogador jogador1, Jogador jogador2) {
-        System.out.println("-----PREENCHENDO TABULEIROS-----");
-        preencherTabuleiro(jogador1, 1);
-        preencherTabuleiro(jogador2, 2);
+        System.out.println("\n-----PREENCHENDO TABULEIROS-----");
+        preencherTabuleiro(jogador1);
+        preencherTabuleiro(jogador2);
 
-        System.out.println("-----COMEÇANDO O JOGO-----\n");
+        System.out.println("\n-----COMEÇANDO O JOGO-----");
         Jogador jogadorAtual, outroJogador;
+        int numJogador; //Representa qual é o jogador atual
 
         //Laço só se encerra quando o jogo acabar
         while(jogo.getRodadas() < 21 || jogo.getTesourosPerdidos1() < 8 || jogo.getTesourosPerdidos2() < 8) {
@@ -100,16 +104,46 @@ public class Main {
             if(jogo.getRodadas() % 2 == 0) {
                 jogadorAtual = jogador2;
                 outroJogador = jogador1;
+                numJogador = 2;
             } else {
                 jogadorAtual = jogador1;
                 outroJogador = jogador2;
+                numJogador = 1;
             }
 
-            jogar(jogadorAtual, outroJogador);
+            jogar(jogadorAtual, outroJogador, numJogador);
         }
+
+        System.out.println("\n-----FIM DE JOGO-----");
+        Jogador vencedor;
+
+        if(jogo.getRodadas() == 21) {
+            System.out.println("-----LIMITE DE RODADAS ATINGIDO-----\n");
+            System.out.println("Cálculo de pontos:");
+            System.out.println(jogador1.getNome() + ": " + jogo.getPontuacao1());
+            System.out.println(jogador2.getNome() + ": " + jogo.getPontuacao2() + "\n");
+
+            //Identificar quem acumulou mais pontos
+            if(jogo.getPontuacao1() == jogo.getPontuacao2()) {
+                System.out.println("\nEMPATE!!");
+                return;
+
+            } else {
+                vencedor = jogo.getPontuacao1() > jogo.getPontuacao2() ? jogador1 : jogador2;
+            }
+        } else {
+            System.out.println("-----UM JOGADOR PERDEU TODOS SEUS TESOUROS-----\n");
+            System.out.println(jogador1.getNome() + ": " + jogo.getTesourosPerdidos1() + " tesouros perdidos");
+            System.out.println(jogador2.getNome() + ": " + jogo.getTesourosPerdidos2() + " tesouros perdidos");
+
+            vencedor = jogo.getTesourosPerdidos2() > jogo.getTesourosPerdidos1() ? jogador1 : jogador2;
+        }
+
+        System.out.println("\nPARABÉNS " + vencedor.getNome() + ", você venceu!!!");
     }
 
-    private static void jogar(Jogador jogadorAtual, Jogador outroJogador) {
+    private static void jogar(Jogador jogadorAtual, Jogador outroJogador, int numJogador) {
+        System.out.println("\n-----RODADA " + jogo.getRodadas() + "-----");
         System.out.println("-----VEZ DE " + jogadorAtual.getNome() + "-----\n");
         mostrarTabuleiros(jogadorAtual, outroJogador);
 
@@ -126,47 +160,76 @@ public class Main {
             System.out.print("Coluna (0 a 9): ");
             coluna = scanner.nextInt();
 
-            valoresValidos = !(linha < 0 || linha > 9 || coluna < 0 || coluna > 9);
-            if(!valoresValidos) { System.out.println("Coordenadas inválidas, tente de novo!\n"); }
+            if(linha < 0 || linha > 9 || coluna < 0 || coluna > 9) {
+                valoresValidos = false;
+                System.out.println("\nCoordenadas inválidas, tente de novo!\n");
+            } else {
+                valoresValidos = analisaListaJogadas(jogadorAtual.getListaJogadas(), linha, coluna);
+            }
 
         } while(!valoresValidos);
 
-        if(jogadorAtual.encontrarTesouro(linha, coluna)) { //Achou um tesouro
+        if(jogadorAtual.encontrarTesouro(outroJogador.getTabuleiro(), linha, coluna)) { //Achou um tesouro
+            //Atualiza o valor de encontrado do tesouro inimigo
+            outroJogador.getTabuleiro().getPosicoes()[linha][coluna].setEncontrado(true);
+
+            //Referencia esse tesouro
             Tesouro tesouroEncontrado = outroJogador.getTabuleiro().getPosicoes()[linha][coluna];
 
             System.out.println("\nPARABÉNS!! " + jogadorAtual.getNome() + " achou um tesouro " +
                     tesouroEncontrado.getCor() + "!!");
 
             System.out.println(jogadorAtual.getNome() + " recebeu " + tesouroEncontrado.getValorPontos() + " pontos!!");
+
+            if(numJogador == 1) {
+                jogo.setPontuacao1(tesouroEncontrado.getValorPontos());
+                jogo.aumentarTesourosPerdidos2();
+            } else {
+                jogo.setPontuacao2(tesouroEncontrado.getValorPontos());
+                jogo.aumentarTesourosPerdidos1();
+            }
+
         } else {
-
-
+            System.out.println("\nQue azar!! Não tinha um tesouro ali...");
         }
+
+        jogo.proximaRodada();
     }
 
-    private static void preencherTabuleiro(Jogador jogador, int numerojogador) {
+    private static boolean analisaListaJogadas(ArrayList<int[]> listaJogadas, int linha, int coluna) {
+        for(int[] jogada : listaJogadas) {
+            if(jogada[0] == linha && jogada[1] == coluna) {
+                System.out.println("Você já fez essa jogada!");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static void preencherTabuleiro(Jogador jogador) {
         System.out.println("\nJogador " + jogador.getNome() + ", informe as coordenadas dos seus tesouros:");
 
-        System.out.print("AMARELOS (4 pontos cada):");
+        System.out.println("AMARELOS (4 pontos cada):");
         for (int i = 0; i < 3; i++) {
-            inserirTesouro(jogador, numerojogador, "Amarelo", 4);
-            if(i != 2) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+            inserirTesouro(jogador, "Amarelo", 4);
+            if(i != 2) { System.out.println("\nTesouro posicionado! Insira os valores do próximo"); }
         }
 
         System.out.println("\nLARANJAS (6 pontos cada):");
         for (int i = 0; i < 3; i++) {
-            inserirTesouro(jogador, numerojogador, "Laranja", 6);
-            if(i != 2) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+            inserirTesouro(jogador, "Laranja", 6);
+            if(i != 2) { System.out.println("\nTesouro posicionado! Insira os valores do próximo"); }
         }
 
         System.out.println("\nVERMELHOS (10 pontos cada):");
         for (int i = 0; i < 2; i++) {
-            inserirTesouro(jogador, numerojogador, "Vermelho", 10);
-            if(i != 1) { System.out.println("Tesouro posicionado! Insira os valores do próximo"); }
+            inserirTesouro(jogador, "Vermelho", 10);
+            if(i != 1) { System.out.println("\nTesouro posicionado! Insira os valores do próximo"); }
         }
     }
 
-    private static void inserirTesouro(Jogador jogador, int numerojogador, String cor, int valorPontos) {
+    private static void inserirTesouro(Jogador jogador, String cor, int valorPontos) {
         boolean posicionou;
         do {
             System.out.print("Linha (0 a 9): ");
@@ -176,9 +239,6 @@ public class Main {
             int coluna = scanner.nextInt();
 
             posicionou = jogador.posicionarTesouro(new Tesouro(cor, linha, coluna, valorPontos));
-            if(numerojogador == 1) {
-
-            }
 
             if(!posicionou) {
                 System.out.println("\nERRO: insira coordenadas válidas! Dois tesouros não podem ocupar o mesmo espaço\n");

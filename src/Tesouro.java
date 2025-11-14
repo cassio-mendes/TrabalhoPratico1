@@ -6,6 +6,7 @@ public class Tesouro {
     private int linha, coluna;
     private int valorPontos;
     private String identificador;
+    private boolean encontrado; //Indica se o tesouro já foi encontrado ou não
 
     //O objeto tesouro é criado recebendo cor, x e y como argumentos
     public Tesouro(String cor, int linha, int coluna, int valorPontos) {
@@ -14,25 +15,30 @@ public class Tesouro {
         this.coluna = coluna;
         this.valorPontos = valorPontos;
         this.identificador = String.valueOf(this.cor.charAt(0));
+        this.encontrado = false;
     }
 
     public String getCor() {
-        return cor;
+        return this.cor;
     }
 
     public int getLinha() {
-        return linha;
+        return this.linha;
     }
 
     public int getColuna() {
-        return coluna;
+        return this.coluna;
     }
 
     public int getValorPontos() {
-        return valorPontos;
+        return this.valorPontos;
     }
 
     public String getIdentificador() {
-        return identificador;
+        return this.identificador;
     }
+
+    public boolean getEncontrado() { return this.encontrado; }
+
+    public void setEncontrado(boolean encontrado) { this.encontrado = encontrado; }
 }
