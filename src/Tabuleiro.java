@@ -11,7 +11,7 @@ public class Tabuleiro {
 
     //Posiciona o tesouro na posição correta
     public void posicionarTesouro(Tesouro tesouro) {
-        this.posicoes[tesouro.getY()][tesouro.getX()] = tesouro;
+        this.posicoes[tesouro.getLinha()][tesouro.getColuna()] = tesouro;
     }
 
     public Tesouro[][] getPosicoes() {
