@@ -98,7 +98,7 @@ public class Main {
         int numJogador; //Representa qual é o jogador atual
 
         //Laço só se encerra quando o jogo acabar
-        while(jogo.getRodadas() < 21 || jogo.getTesourosPerdidos1() < 8 || jogo.getTesourosPerdidos2() < 8) {
+        while(jogo.getRodadas() < 21 && jogo.getTesourosPerdidos1() < 8 && jogo.getTesourosPerdidos2() < 8) {
 
             //Se a rodada atual for par, vez do jogador2; do contrário, vez do jogador1
             if(jogo.getRodadas() % 2 == 0) {
@@ -121,7 +121,7 @@ public class Main {
             System.out.println("-----LIMITE DE RODADAS ATINGIDO-----\n");
             System.out.println("Cálculo de pontos:");
             System.out.println(jogador1.getNome() + ": " + jogo.getPontuacao1());
-            System.out.println(jogador2.getNome() + ": " + jogo.getPontuacao2() + "\n");
+            System.out.println(jogador2.getNome() + ": " + jogo.getPontuacao2());
 
             //Identificar quem acumulou mais pontos
             if(jogo.getPontuacao1() == jogo.getPontuacao2()) {
